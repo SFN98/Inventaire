@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Data</title>
+    <link href="preview.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Preview Data</h1>
+    <table id="dataTable" border="1">
+        <thead>
+            <!-- Header will be dynamically inserted here -->
+        </thead>
+        <tbody>
+            <!-- Rows will be inserted here -->
+        </tbody>
+    </table>
+    <div>
+        <button class="back"><a href="index.html">Retour à la saisie</a></button>
+        <button id="clearButton">Effacer le Tableau</button>
+    </div>
+
+    <script>
+        // Array containing the names of the inputs
+        const inputNames = [
+            'N° Code Barre', 
+            'Désignation', 
+            'Référence', 
+            'N° série', 
+            'Ancienne localisation', 
+            'Localisation actuelle', 
+            'Utilisateur', 
+            'Date d\'inventaire', 
+            'Observation et/ou commentaire'
+        ];
+
+        // Function to create the table header
+        function createTableHeader() {
+            const thead = document.querySelector('#dataTable thead');
+            const headerRow = document.createElement('tr');
+
+            inputNames.forEach(name => {
+                const th = document.createElement('th');
+                th.textContent = name;
+                headerRow.appendChild(th);
+            });
+
+            thead.appendChild(headerRow);
+        }
+
+        const dataList = JSON.parse(localStorage.getItem('dataList')) || [];
+        const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+
+        function renderTable() {
+            tableBody.innerHTML = ''; // Clear the table body
+            dataList.slice(1).forEach(row => { // Skip header row
+                const newRow = tableBody.insertRow();
+                row.forEach(cellData => {
+                    const newCell = newRow.insertCell();
+                    newCell.textContent = cellData;
+                });
+            });
+        }
+
+        document.getElementById('clearButton').addEventListener('click', () => {
+            localStorage.removeItem('dataList');
+            dataList.length = 0; // Clear the array
+            renderTable(); // Re-render the table
+        });
+
+        // Create the table header on initial load
+        createTableHeader();
+
+        // Initial render
+        renderTable();
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-image: linear-gradient(to right, #272727,#4F98CA,  #EFFFFB);
+}
+fieldset{
+    margin: 50px;
+    /* min-width: 60vw; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border: none;
+}
+
+.Bouton{
+    margin: 60px;
+    width: 315px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:5px;
+    
+}
+
+button{
+    height: 30px;
+    width: 100px;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+
+input[type="date"]{
+    width: 200px;
+}
+input{
+    height: 30px;
+    width: 200px;
+    border: none;
+    margin: 4px 4px;
+}
+
+main{
+    background-color: #4F98CA;
+    
+}
+
+.save{
+    background-color: rgb(3, 246, 3);
+}
+.download{
+    background-color: rgb(18, 18, 93);
+}
+.Preview{
+    background-color: #FDB827;
+}
+
+button a{
+    text-decoration: none;
+    color: white;
+}
+
+
+@media screen and (min-width:320px) and (max-width:767px){
+
+fieldset{
+    margin: 0;
+    width:40vw;
+}
+
+button{
+    font-size: 0.6em;
+    width: 50px;
+}
+
+input{
+    margin: 10px;
+}
+
+main{
+    min-height: 80vh;
+    min-width: 70vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.Bouton{
+    margin: 0;
+    width: 190px;
+    display: flex;
+    justify-content: flex-end;
+    
+
+}
+    
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventaire Immo</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Inventaire Immo 2024</h1>
+
+    <main>
+        <form id="dataForm">
+            <fieldset>
+                <input type="number" id="N°CodeBarre" name="N° Code Barre" placeholder="N°Code Barre">
+                <input type="text" id="input2" name="Désignation" placeholder="Désignation">
+                <input type="text" id="input3" name="Référence" placeholder="Référence">
+            </fieldset>
+    
+            <fieldset> 
+                <input type="number" id="N° serie" name="N° série" placeholder="N° série">
+                <input type="text" id="Ancienne localisation" name="Ancienne localisation" placeholder="Ancienne localisation">
+                <input type="text" id="Localisation actuelle" name="Localisation actuelle" placeholder="Localisation actuelle">
+            </fieldset>
+           
+            <fieldset>
+                <input type="text" id="Utilisateur" name="Utilisateur" placeholder="Utilisateur">
+                <input type="date" id="Date d'inventaire" name="Date d'inventaire" placeholder="Date d'inventaire">
+                <input type="text" id="Observation et/ou commentaire" name="Observation et/ou commentaire" placeholder="Observation et/ou commentaire">
+            </fieldset>
+
+            <fieldset class="Bouton">       
+                <button class="save" type="button" onclick="saveData()">Save Data</button>
+                <button class="Preview"><a href="preview.html">Preview Data</a></button>
+                <button class="download" type="button" onclick="generateExcel()">Download Excel</button>
+            </fieldset>
+  
+        </form>
+
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script>
+        let dataList = JSON.parse(localStorage.getItem('dataList')) || [
+            ['N° Code Barre', 'Désignation', 'Référence', 'N° série', 'Ancienne localisation', 'Localisation actuelle', 'Utilisateur', "Date d'inventaire", 'Observation et/ou commentaire'] // Headers
+        ];
+        let usedValuesInput1 = new Set(JSON.parse(localStorage.getItem('usedValuesInput1')) || []);
+        let usedValuesInput4 = new Set(JSON.parse(localStorage.getItem('usedValuesInput4')) || []);
+
+        function saveData() {
+            const inputs = document.querySelectorAll('input');
+            const data = Array.from(inputs).map(input => input.value);
+
+            // Check if input1 and input4 have unique values
+            if (usedValuesInput1.has(data[0])) {
+                alert("Vous avez déjà entré ce code barre, changez le");
+                return;
+            }
+            if (usedValuesInput4.has(data[3])) {
+                alert("Vous avez déjà entré ce numéro de serie, changez le");
+                return;
+            }
+
+            // Add new values to sets
+            usedValuesInput1.add(data[0]);
+            usedValuesInput4.add(data[3]);
+
+            dataList.push(data);
+
+            // Save to localStorage
+            localStorage.setItem('dataList', JSON.stringify(dataList));
+            localStorage.setItem('usedValuesInput1', JSON.stringify(Array.from(usedValuesInput1)));
+            localStorage.setItem('usedValuesInput4', JSON.stringify(Array.from(usedValuesInput4)));
+
+            // Clear the inputs for new data entry
+            inputs.forEach(input => input.value = '');
+
+            console.log("Data saved:", data);
+            console.log("Current data list:", dataList);
+        }
+
+        function generateExcel() {
+            // Create a new worksheet with all saved data
+            const ws = XLSX.utils.aoa_to_sheet(dataList);
+
+            // Create a new workbook and append the worksheet
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+            // Generate and download the Excel file
+            XLSX.writeFile(wb, 'data.xlsx');
+        }
+    </script>
+</body>
+</html>
